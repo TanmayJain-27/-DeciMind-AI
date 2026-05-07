@@ -10,7 +10,7 @@ function AdminDashboard() {
 
   useEffect(() => {
     // Backend URL
-    const BASE = "http://127.0.0.1:5000";
+    const BASE = "https://decimind-ai-backend.onrender.com";
 
     async function fetchData() {
       try {
