@@ -18,8 +18,12 @@ from explain.explain_education import explain_education
 
 app = Flask(__name__)
 
-# ✅ FIXED CORS (NO DUPLICATE HEADERS)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+# ✅ FIXED CORS FOR LOCAL + DEPLOYED FRONTEND
+CORS(
+    app,
+    resources={r"/*": {"origins": "*"}},
+    supports_credentials=True
+)
 
 app.config["JWT_SECRET_KEY"] = "hdis-secret-key"
 jwt = JWTManager(app)
