@@ -66,6 +66,37 @@ def save_log(domain, decision, score):
     db.close()
 
 # =========================
+# CREATE DECISION LOG API
+# =========================
+@app.route("/api/decision-log", methods=["POST"])
+def create_decision_log():
+    d = request.json
+
+    db = get_db()
+    cur = db.cursor()
+
+    cur.execute("""
+    INSERT INTO decision_logs
+    (user_id, domain, ai_decision, confidence, human_decision, reason, timestamp)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (
+        1,
+        d.get("domain"),
+        d.get("aiDecision"),
+        d.get("confidence"),
+        d.get("humanDecision"),
+        d.get("reason"),
+        d.get("timestamp")
+    ))
+
+    db.commit()
+    db.close()
+
+    return jsonify({
+        "message": "Log created successfully"
+    })
+
+# =========================
 # FINANCE
 # =========================
 @app.route("/api/loan-predict", methods=["POST"])
@@ -73,10 +104,17 @@ def loan_predict():
     d = request.json
     score = 0
 
-    if int(d.get("income", 0)) > 500000: score += 30
-    if int(d.get("creditScore", 0)) > 700: score += 30
-    if int(d.get("loanAmount", 0)) < int(d.get("income", 0)) * 2: score += 20
-    if d.get("employment") != "unemployed": score += 20
+    if int(d.get("income", 0)) > 500000:
+        score += 30
+
+    if int(d.get("creditScore", 0)) > 700:
+        score += 30
+
+    if int(d.get("loanAmount", 0)) < int(d.get("income", 0)) * 2:
+        score += 20
+
+    if d.get("employment") != "unemployed":
+        score += 20
 
     decision = "APPROVE" if score >= 60 else "REJECT"
 
@@ -120,11 +158,20 @@ def health_risk():
     d = request.json
     score = 0
 
-    if int(d.get("age", 0)) > 60: score += 15
-    if int(d.get("heartRate", 0)) > 100: score += 15
-    if int(d.get("bloodPressure", 0)) > 140: score += 15
-    if int(d.get("oxygenLevel", 0)) < 92: score += 15
-    if d.get("existingCondition") == "yes": score += 10
+    if int(d.get("age", 0)) > 60:
+        score += 15
+
+    if int(d.get("heartRate", 0)) > 100:
+        score += 15
+
+    if int(d.get("bloodPressure", 0)) > 140:
+        score += 15
+
+    if int(d.get("oxygenLevel", 0)) < 92:
+        score += 15
+
+    if d.get("existingCondition") == "yes":
+        score += 10
 
     decision = "HIGH RISK" if score >= 60 else "LOW RISK"
 
@@ -170,9 +217,14 @@ def hr_evaluate():
     d = request.json
     score = 0
 
-    if int(d.get("experience", 0)) >= 5: score += 30
-    if int(d.get("skillMatch", 0)) >= 60: score += 30
-    if d.get("education") in ["master", "phd"]: score += 20
+    if int(d.get("experience", 0)) >= 5:
+        score += 30
+
+    if int(d.get("skillMatch", 0)) >= 60:
+        score += 30
+
+    if d.get("education") in ["master", "phd"]:
+        score += 20
 
     decision = "SHORTLIST" if score >= 60 else "REJECT"
 
@@ -210,8 +262,11 @@ def fraud_check():
     d = request.json
     score = 0
 
-    if int(d.get("amount", 0)) > 50000: score += 30
-    if int(d.get("loginAttempts", 0)) > 3: score += 20
+    if int(d.get("amount", 0)) > 50000:
+        score += 30
+
+    if int(d.get("loginAttempts", 0)) > 3:
+        score += 20
 
     decision = "FRAUD" if score >= 60 else "SAFE"
 
@@ -247,8 +302,11 @@ def student_risk():
     d = request.json
     score = 0
 
-    if int(d.get("attendance", 0)) < 75: score += 30
-    if int(d.get("internalMarks", 0)) < 40: score += 30
+    if int(d.get("attendance", 0)) < 75:
+        score += 30
+
+    if int(d.get("internalMarks", 0)) < 40:
+        score += 30
 
     decision = "HIGH RISK" if score >= 60 else "LOW RISK"
 
@@ -317,10 +375,11 @@ def admin_metrics():
     return jsonify({
         "total": total
     })
-    
+
 @app.route("/")
 def home():
     return "HDIS Backend Running 🚀"
+
 # =========================
 # RUN
 # =========================

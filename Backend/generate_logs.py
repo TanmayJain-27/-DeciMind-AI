@@ -1,8 +1,7 @@
 import requests
 import random
-from datetime import datetime
+import time
 
-# ✅ LIVE DEPLOYED BACKEND
 BASE = "https://decimind-ai-backend.onrender.com"
 
 domains = {
@@ -13,31 +12,21 @@ domains = {
     "Education": ["HIGH RISK", "LOW RISK"],
 }
 
-def rand_conf():
-    return random.randint(80, 95)
-
-rows = []
-now = datetime.now().strftime("%Y-%m-%d")
-
 print("🚀 Generating live logs...")
 
 for domain, labels in domains.items():
+
     for _ in range(100):
 
         ai = random.choice(labels)
 
-        # ✅ Mostly aligned human decisions
-        human = ai if random.random() > 0.15 else (
-            labels[0] if ai != labels[0] else labels[1]
-        )
-
         payload = {
             "domain": domain,
             "aiDecision": ai,
-            "confidence": rand_conf(),
-            "humanDecision": human,
+            "confidence": random.randint(40, 95),
+            "humanDecision": ai,
             "reason": "auto-generated",
-            "timestamp": now
+            "timestamp": "2026-05-07"
         }
 
         try:
@@ -49,4 +38,6 @@ for domain, labels in domains.items():
         except Exception as e:
             print("Error:", e)
 
-print("✅ Inserted 500 rows per domain (total 2500 rows)")
+        time.sleep(0.05)
+
+print("✅ Logs inserted successfully")
