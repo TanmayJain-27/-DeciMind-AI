@@ -18,13 +18,13 @@ function Login() {
     const data = await res.json();
 
     if (res.ok && data.token) {
-      localStorage.clear();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userName", data.name);
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("role", data.role);
+  localStorage.setItem("userName", data.name);
 
-      data.role === "admin" ? navigate("/admin") : navigate("/home");
-    } else {
+  data.role === "admin" ? navigate("/admin") : navigate("/home");
+}
+    else {
       alert(data.error || "Invalid credentials");
     }
   };
