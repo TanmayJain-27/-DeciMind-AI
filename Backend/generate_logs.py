@@ -1,9 +1,9 @@
-import sqlite3
+import requests
 import random
 from datetime import datetime
 
-conn = sqlite3.connect("hdis.db")
-cur = conn.cursor()
+# ✅ LIVE DEPLOYED BACKEND
+BASE = "https://decimind-ai-backend.onrender.com"
 
 domains = {
     "Finance": ["APPROVE", "REJECT"],
@@ -14,38 +14,39 @@ domains = {
 }
 
 def rand_conf():
-    return random.randint(30, 95)
-
-def maybe_override(ai):
-    # ~30% overrides
-    return ai if random.random() > 0.3 else random.choice(
-        [d for d in ["APPROVE","REJECT","HIGH RISK","LOW RISK","SHORTLIST","FRAUD","SAFE"] if d != ai]
-    )
+    return random.randint(80, 95)
 
 rows = []
 now = datetime.now().strftime("%Y-%m-%d")
 
+print("🚀 Generating live logs...")
+
 for domain, labels in domains.items():
-    for _ in range(500):
+    for _ in range(100):
+
         ai = random.choice(labels)
-        human = ai if random.random() > 0.3 else (labels[0] if ai != labels[0] else labels[1])
 
-        rows.append((
-            1,                  # user_id
-            domain,
-            ai,
-            rand_conf(),
-            human,
-            "auto-generated",
-            now
-        ))
+        # ✅ Mostly aligned human decisions
+        human = ai if random.random() > 0.15 else (
+            labels[0] if ai != labels[0] else labels[1]
+        )
 
-cur.executemany("""
-INSERT INTO decision_logs (user_id, domain, ai_decision, confidence, human_decision, reason, timestamp)
-VALUES (?, ?, ?, ?, ?, ?, ?)
-""", rows)
+        payload = {
+            "domain": domain,
+            "aiDecision": ai,
+            "confidence": rand_conf(),
+            "humanDecision": human,
+            "reason": "auto-generated",
+            "timestamp": now
+        }
 
-conn.commit()
-conn.close()
+        try:
+            requests.post(
+                f"{BASE}/api/decision-log",
+                json=payload
+            )
+
+        except Exception as e:
+            print("Error:", e)
 
 print("✅ Inserted 500 rows per domain (total 2500 rows)")
