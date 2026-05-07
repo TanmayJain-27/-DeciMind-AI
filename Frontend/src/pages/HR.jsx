@@ -52,7 +52,7 @@ function HR() {
   };
 
   const handleSubmit = async () => {
-    const res = await fetch("http://127.0.0.1:5000/api/hr-evaluate", {
+    const res = await fetch("https://decimind-ai-backend.onrender.com/api/hr-evaluate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -69,7 +69,7 @@ function HR() {
       return;
     }
 
-    await fetch("http://127.0.0.1:5000/api/decision-log", {
+    await fetch("https://decimind-ai-backend.onrender.com/api/decision-log", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

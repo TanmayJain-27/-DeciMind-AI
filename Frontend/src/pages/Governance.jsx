@@ -6,7 +6,7 @@ function Governance() {
   const [drift, setDrift] = useState(null);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/admin/governance-score", {
+    fetch("https://decimind-ai-backend.onrender.com/api/admin/governance-score", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -14,7 +14,7 @@ function Governance() {
       .then(res => res.json())
       .then(setScore);
 
-    fetch("http://127.0.0.1:5000/api/admin/drift-radar", {
+    fetch("https://decimind-ai-backend.onrender.com/api/admin/drift-radar", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

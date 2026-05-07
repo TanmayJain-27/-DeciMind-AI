@@ -27,7 +27,7 @@ function Finance() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async () => {
-    const response = await fetch("http://127.0.0.1:5000/api/loan-predict", {
+    const response = await fetch("https://decimind-ai-backend.onrender.com/api/loan-predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -43,7 +43,7 @@ function Finance() {
       return;
     }
 
-    await fetch("http://127.0.0.1:5000/api/decision-log", {
+    await fetch("https://decimind-ai-backend.onrender.com/api/decision-log", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

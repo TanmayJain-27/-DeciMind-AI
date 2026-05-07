@@ -9,7 +9,7 @@ function Signup() {
   const navigate = useNavigate();
 
   const handleSignup = async () => {
-    const res = await fetch("http://127.0.0.1:5000/api/register", {
+    const res = await fetch("https://decimind-ai-backend.onrender.com/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password, role }),

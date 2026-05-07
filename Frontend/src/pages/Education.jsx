@@ -21,7 +21,7 @@ function Education() {
 
   // ================= AI PREDICTION =================
   const handleSubmit = async () => {
-    const response = await fetch("http://127.0.0.1:5000/api/student-risk", {
+    const response = await fetch("https://decimind-ai-backend.onrender.com/api/student-risk", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +41,7 @@ function Education() {
       alert("Reason required for overriding AI decision");
       return;
     }
-    await fetch("http://127.0.0.1:5000/api/decision-log", {
+    await fetch("https://decimind-ai-backend.onrender.com/api/decision-log", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

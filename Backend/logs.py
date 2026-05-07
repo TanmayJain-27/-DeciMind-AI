@@ -2,7 +2,8 @@ import requests
 import random
 import time
 
-BASE = "http://127.0.0.1:5000"
+# ✅ DEPLOYED BACKEND URL
+BASE = "https://decimind-ai-backend.onrender.com"
 
 def finance():
     return requests.post(f"{BASE}/api/loan-predict", json={
@@ -50,7 +51,7 @@ functions = [finance, health, hr, cyber, edu]
 
 print("🚀 Generating logs...")
 
-for i in range(200):  # 🔥 increase this number for more logs
+for i in range(200):
     random.choice(functions)()
     time.sleep(0.1)
 

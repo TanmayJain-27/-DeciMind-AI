@@ -34,7 +34,7 @@ function Healthcare() {
   };
 
   const handleSubmit = async () => {
-    const res = await fetch("http://127.0.0.1:5000/api/health-risk", {
+    const res = await fetch("https://decimind-ai-backend.onrender.com/api/health-risk", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -52,7 +52,7 @@ function Healthcare() {
       return;
     }
 
-    await fetch("http://127.0.0.1:5000/api/decision-log", {
+    await fetch("https://decimind-ai-backend.onrender.com/api/decision-log", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
