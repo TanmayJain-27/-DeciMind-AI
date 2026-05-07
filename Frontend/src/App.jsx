@@ -5,7 +5,7 @@ import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Finance from "./pages/Finance";
 import Healthcare from "./pages/Healthcare";
-import HR from "./pages/Hr";
+import HR from "./pages/HR";
 import Education from "./pages/Education";
 import Cybersecurity from "./pages/Cybersecurity";
 import AdminDashboard from "./pages/AdminDashboard";
