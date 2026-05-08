@@ -18,6 +18,7 @@ function Login() {
     const data = await res.json();
 
     if (res.ok && data.token) {
+      localStorage.clear();
   localStorage.setItem("token", data.token);
   localStorage.setItem("role", data.role);
   localStorage.setItem("userName", data.name);
