@@ -4,7 +4,8 @@ import pandas as pd
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-import sqlite3
+import psycopg2
+import os
 
 from ml_engine.predict import predict_override
 from auth import auth
@@ -30,8 +31,48 @@ jwt = JWTManager(app)
 
 app.register_blueprint(auth)
 
+# =========================
+# POSTGRES DATABASE
+# =========================
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
 def get_db():
-    return sqlite3.connect("hdis.db")
+    return psycopg2.connect(DATABASE_URL)
+
+# =========================
+# AUTO CREATE TABLES
+# =========================
+def init_db():
+    db = get_db()
+    cur = db.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        email TEXT UNIQUE,
+        password TEXT,
+        role TEXT DEFAULT 'user'
+    )
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS decision_logs (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER,
+        domain TEXT,
+        ai_decision TEXT,
+        confidence REAL,
+        human_decision TEXT,
+        reason TEXT,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+
+    db.commit()
+    db.close()
+
+init_db()
 
 # =========================
 # LOAD MODELS
@@ -52,7 +93,7 @@ def save_log(domain, decision, score):
     cur.execute("""
     INSERT INTO decision_logs 
     (user_id, domain, ai_decision, confidence, human_decision, reason, timestamp)
-    VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+    VALUES (%s, %s, %s, %s, %s, %s, NOW())
     """, (
         1,
         domain,
@@ -78,7 +119,7 @@ def create_decision_log():
     cur.execute("""
     INSERT INTO decision_logs
     (user_id, domain, ai_decision, confidence, human_decision, reason, timestamp)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
     """, (
         1,
         d.get("domain"),
